@@ -3,10 +3,7 @@ import { SnGDLottery } from "../contracts/MainContract";
 import { useTonClient } from "./useTonClient";
 import { useTonConnect } from "./useTonConnect";
 import { useAsyncInitialize } from "./useAsyncInitialize";
-import { Address, OpenedContract, toNano } from "@ton/core";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { Address, OpenedContract, toNano } from "@ton/core"; 
 
 export function useMainContract() {
   const client = useTonClient();
@@ -23,7 +20,7 @@ export function useMainContract() {
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = SnGDLottery.fromAddress(
-      Address.parse(process.env.CONTRACT_ADDRESS!)
+      Address.parse(import.meta.env.VITE_CONTRACT_ADDRESS!)
     );
     return client.open(contract) as OpenedContract<SnGDLottery>;
   }, [client]);
