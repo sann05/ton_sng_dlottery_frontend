@@ -26,7 +26,7 @@ function App() {
       <div className="Card">
         <div><b>Your platform is {WebApp.platform}</b></div>
         <b>Participants Number</b>
-        <div className="Hint">{participantsCount ? (participantsCount.toString() + " out of 10") : "Loading..."}</div>
+        <div className="Hint">{participantsCount ? (participantsCount.toString()) : "0"} out of 10</div>
       </div>
       <div>
         {
