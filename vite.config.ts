@@ -8,6 +8,6 @@ export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     plugins: [react(), nodePolyfills()],
-    base: env.VITE_ENVIRONMENT === 'production' ? '/ton_sng_dlottery_frontend/' : '/',  
+    base: env.VITE_ENVIRONMENT === 'dev' ? '/' : '/ton_sng_dlottery_frontend/',  
   }
 })
