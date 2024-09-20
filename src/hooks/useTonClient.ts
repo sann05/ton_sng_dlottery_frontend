@@ -7,7 +7,7 @@ export function useTonClient() {
     async () =>
       new TonClient({
         endpoint: await getHttpEndpoint({
-          network: "testnet",
+          network: "testnet", // TODO: use env
         }),
       })
   );

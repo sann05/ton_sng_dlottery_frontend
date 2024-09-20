@@ -3,6 +3,7 @@ import { TonConnectButton } from "@tonconnect/ui-react";
 import { useMainContract } from "./hooks/useMainContract";
 import { useTonConnect } from "./hooks/useTonConnect";
 import WebApp from '@twa-dev/sdk'
+import { useTonAddress } from "@tonconnect/ui-react";
 
 function App() {
   const {
@@ -14,14 +15,14 @@ function App() {
   } = useMainContract();
 
   const { connected } = useTonConnect();
+  const userFriendlyAddress = useTonAddress();
   return (
     <div>
       <div>
         <TonConnectButton />
       </div>
-      <b>Our contract address</b>
-      <div className="Hint">{contractAddress?.slice(0, 30) + "..."}</div>
-
+      <b>You are logged as: </b>
+      <div className="Hint">{userFriendlyAddress?.slice(0, 30) + "..."}</div>
 
       <div className="Card">
         <div><b>Your platform is {WebApp.platform}</b></div>
