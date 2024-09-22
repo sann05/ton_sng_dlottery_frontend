@@ -27,6 +27,7 @@
   position: relative;
   width: calc(100vw - 4rem);
   height: 400px;
+  margin-bottom: 2rem;
 
   .table-container {
     opacity: 0;

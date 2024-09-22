@@ -6,7 +6,10 @@
 .table-background {
   top: 88px;
   position: absolute;
-  width: 100%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: 300px;
   height: 300px;
   background: url(../../assets/table.png) no-repeat center / 100% 100%;
 }
