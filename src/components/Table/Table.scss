@@ -1,0 +1,56 @@
+.table-container {
+  width: 100%;
+  position: relative;
+}
+
+.table-background {
+  top: 88px;
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background: url(../../assets/table.png) no-repeat center / 100% 100%;
+}
+
+.table-counter {
+  width: 100%;
+  height: 3rem;
+  position: absolute;
+  color: white;
+  top: 154px;
+
+  span {
+    font-size: 2rem;
+    font-family: "Rubik Mono One", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    text-shadow: 5px 5px #558abb;
+  }
+}
+
+.users-container {
+  position: absolute;
+  width: 100%;
+  height: 370px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Position avatars in an oval */
+.user {
+  --angle: calc(360deg / 10 * var(--i) - 90deg);
+  left: calc(50% + 140px * cos(var(--angle)));
+  top: calc(50% + 142px * sin(var(--angle)));
+}
+
+.user-placeholder {
+  --angle: calc(360deg / 10 * var(--i) - 90deg);
+  left: calc(50% + 140px * cos(var(--angle)));
+  top: calc(50% + 142px * sin(var(--angle)));
+  animation: scaleUp 4s ease-in-out infinite;
+  animation-delay: calc(0.15s * var(--i));
+}

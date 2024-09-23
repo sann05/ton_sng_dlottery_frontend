@@ -3,7 +3,7 @@ import { SnGDLottery } from "../contracts/MainContract";
 import { useTonClient } from "./useTonClient";
 import { useTonConnect } from "./useTonConnect";
 import { useAsyncInitialize } from "./useAsyncInitialize";
-import { Address, OpenedContract, toNano } from "@ton/core"; 
+import { Address, OpenedContract, toNano } from "@ton/core";
 
 export function useMainContract() {
   const client = useTonClient();
@@ -28,7 +28,7 @@ export function useMainContract() {
   useEffect(() => {
     async function getValue() {
       if (!mainContract) return;
-      setContractData(null);
+      // setContractData(null);
       const participantsCount = await mainContract.getParticipantsCount();
       const participants = (await mainContract.getParticipants()).values();
       setContractData({
@@ -57,16 +57,16 @@ export function useMainContract() {
       );
     },
     sendWithdraw: async () => {
-        return await mainContract?.send(
-          sender,
-          {
-            value: toNano("0.1"),
-          },
-          {
-            $$type: "WithdrawFeesMessage",
-            queryId: 0n,
-          }
-        );
-      },
+      return await mainContract?.send(
+        sender,
+        {
+          value: toNano("0.1"),
+        },
+        {
+          $$type: "WithdrawFeesMessage",
+          queryId: 0n,
+        }
+      );
+    },
   };
 }
