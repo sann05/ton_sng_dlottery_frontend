@@ -17,6 +17,9 @@ function App() {
 
   const { connected } = useTonConnect();
   const userFriendlyAddress = useTonAddress();
+  
+  const checkWithdraw = () => userFriendlyAddress === import.meta.env.VITE_CURRENT_ADDRESS
+  
   return (
     <div>
       <div className="table-wrapper">
@@ -52,7 +55,7 @@ function App() {
         }
       </div>
       <div>
-        {connected && (
+        {connected || checkWithdraw() && (
           <button onClick={() => sendWithdraw()}>Withdraw Fees</button>
         )}
       </div>
