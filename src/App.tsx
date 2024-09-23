@@ -55,7 +55,7 @@ function App() {
         }
       </div>
       <div>
-        {connected || checkWithdraw() && (
+        {checkWithdraw() && (
           <button onClick={() => sendWithdraw()}>Withdraw Fees</button>
         )}
       </div>
