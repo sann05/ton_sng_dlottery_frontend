@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.4",
     "@orbs-network/ton-access": "^2.3.3",
     "@ton/core": "^0.57.0",
     "@ton/crypto": "^3.3.0",
@@ -21,6 +24,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-nice-avatar": "^1.5.0",
+    "react-virtuoso": "^4.12.0",
     "ton": "^13.9.0",
     "ton-core": "^0.53.0",
     "ton-crypto": "^3.2.0",

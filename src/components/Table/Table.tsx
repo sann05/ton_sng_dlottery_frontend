@@ -1,43 +1,44 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "./Table.scss";
 import { UserAvatar } from "../UserAvatar/UserAvatar";
-import { Address } from "@ton/core";
-import { UserPlaceholder } from "../UserAvatar/Placeholder/Placeholder";
+import {
+  Paper,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
+import { Participants, ParticipantsData } from "./TableTypes";
+import { TableVirtuoso } from "react-virtuoso";
+import {
+  fixedHeaderContent,
+  rowContent,
+  VirtuosoTableComponents,
+} from "./VirtuosoTableComponents";
 
-interface TableProps {
-  participants: Address[];
-  participantsCount: number;
-}
-
-export const Table: React.FC<TableProps> = ({
+export const ParticipantsTable: React.FC<ParticipantsData> = ({
   participants,
-  participantsCount,
 }) => {
-  const totalItems = 10;
-  const items = [
-    ...participants,
-    ...new Array(totalItems - participants.length).fill("placeholder"),
-  ];
+  const rows: Participants[] = useMemo(
+    () =>
+      participants.map((participant, index) => ({
+        number: index,
+        id: participant.toString(),
+        avatar: participant.toString(),
+      })),
+    []
+  );
 
   return (
-    <div className="table-container">
-      <div className="table-background"></div>
-      <div className="table-counter">
-        <span>{participantsCount < 10 ? `${participantsCount}/10` : ""}</span>
-      </div>
-      <div className="users-container">
-        {items.map((participant, index) =>
-          participant !== "placeholder" ? (
-            <UserAvatar
-              key={participant.toString()}
-              participant={participant}
-              index={index}
-            />
-          ) : (
-            <UserPlaceholder key={index} index={index} />
-          )
-        )}
-      </div>
-    </div>
+    <Paper style={{ height: 400, width: "100%" }}>
+      <TableVirtuoso
+        data={rows}
+        components={VirtuosoTableComponents}
+        fixedHeaderContent={fixedHeaderContent}
+        itemContent={rowContent}
+      />
+    </Paper>
   );
 };

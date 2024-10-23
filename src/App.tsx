@@ -4,7 +4,7 @@ import { useMainContract } from "./hooks/useMainContract";
 import { useTonConnect } from "./hooks/useTonConnect";
 import WebApp from "@twa-dev/sdk";
 import { useTonAddress } from "@tonconnect/ui-react";
-import { Table } from "./components/Table/Table";
+import { ParticipantsTable } from "./components/Table/Table";
 
 function App() {
   const {
@@ -17,14 +17,15 @@ function App() {
 
   const { connected } = useTonConnect();
   const userFriendlyAddress = useTonAddress();
-  
-  const checkWithdraw = () => userFriendlyAddress === import.meta.env.VITE_CURRENT_ADDRESS
-  
+
+  const checkWithdraw = () =>
+    userFriendlyAddress === import.meta.env.VITE_CURRENT_ADDRESS;
+
   return (
     <div>
       <div className="table-wrapper">
         {participants && participantsCount && (
-          <Table
+          <ParticipantsTable
             participants={participants}
             participantsCount={participantsCount}
           />

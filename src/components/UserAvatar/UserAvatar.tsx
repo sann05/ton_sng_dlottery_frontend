@@ -1,24 +1,19 @@
 import React from "react";
 import Avatar, { genConfig } from "react-nice-avatar";
 import "./UserAvatar.scss";
-import { Address } from "@ton/core";
-import { CreepingText } from "./CreepingText/CreepingText";
 
 interface UserProps {
-  participant: Address;
+  participant: string;
   index: number;
 }
 
 export const UserAvatar: React.FC<UserProps> = ({ participant, index }) => {
-  const config = genConfig(participant.toString() + index);
+  const config = genConfig(participant + index);
 
   return (
     <div className="user" style={{ "--i": index } as React.CSSProperties}>
       <div className="avatar-container">
-        <Avatar style={{ width: "60px", height: "60px" }} {...config} />
-      </div>
-      <div className="username">
-        <CreepingText text={participant.toString()} />
+        <Avatar style={{ width: "40px", height: "40px" }} {...config} />
       </div>
     </div>
   );
