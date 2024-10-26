@@ -3,7 +3,6 @@ import { Address } from "@ton/core";
 export interface ColumnData {
   dataKey: keyof Participants;
   label: string;
-  numeric?: boolean;
   width?: number;
 }
 

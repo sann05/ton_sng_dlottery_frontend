@@ -18,17 +18,21 @@ import {
   VirtuosoTableComponents,
 } from "./VirtuosoTableComponents";
 
+const totalItems = 500;
+
 export const ParticipantsTable: React.FC<ParticipantsData> = ({
   participants,
 }) => {
-  const rows: Participants[] = useMemo(
+  const rows: (Participants | null)[] = useMemo(
     () =>
-      participants.map((participant, index) => ({
-        number: index,
-        id: participant.toString(),
-        avatar: participant.toString(),
-      })),
-    []
+      participants
+        .map((participant, index) => ({
+          number: index,
+          id: participant.toString(),
+          avatar: participant.toString(),
+        }))
+        .concat(new Array(totalItems - participants.length).fill(null)),
+    [participants]
   );
 
   return (

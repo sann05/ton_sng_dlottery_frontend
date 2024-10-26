@@ -1,6 +1,6 @@
 import React from "react";
 import { TableComponents } from "react-virtuoso";
-import { ColumnData, Participants, ParticipantsData } from "./TableTypes";
+import { ColumnData, Participants } from "./TableTypes";
 import {
   Paper,
   Table,
@@ -11,21 +11,21 @@ import {
   TableRow,
 } from "@mui/material";
 import { UserAvatar } from "../UserAvatar/UserAvatar";
+import { CreepingText } from "../UserAvatar/CreepingText/CreepingText";
 
 export const columns: ColumnData[] = [
   {
-    width: 50,
-    label: "number",
+    width: 20,
+    label: "N",
     dataKey: "number",
-    numeric: true,
   },
   {
-    width: 50,
+    width: 100,
     label: "id",
     dataKey: "id",
   },
   {
-    width: 100,
+    width: 50,
     label: "avatar",
     dataKey: "avatar",
   },
@@ -38,7 +38,6 @@ export function fixedHeaderContent() {
         <TableCell
           key={column.dataKey}
           variant="head"
-          align={column.numeric || false ? "right" : "left"}
           style={{ width: column.width }}
           sx={{ backgroundColor: "background.paper" }}
         >
@@ -49,19 +48,20 @@ export function fixedHeaderContent() {
   );
 }
 
-export function rowContent(index: number, row: Participants) {
+export function rowContent(index: number, row: Participants | null) {
+  if (!row) return <TableCell colSpan={3}>Empty seed</TableCell>;
+
   return (
     <React.Fragment>
       {columns.map((column) => (
-        <TableCell
-          key={column.dataKey}
-          align={column.numeric || false ? "right" : "left"}
-        >
+        <TableCell key={column.dataKey}>
           {column.dataKey === "avatar" ? (
             <UserAvatar
               participant={row[column.dataKey] as string}
               index={index}
             />
+          ) : column.dataKey === "id" ? (
+            <CreepingText text={row[column.dataKey]} />
           ) : (
             row[column.dataKey]
           )}
@@ -71,7 +71,7 @@ export function rowContent(index: number, row: Participants) {
   );
 }
 
-export const VirtuosoTableComponents: TableComponents<Participants> = {
+export const VirtuosoTableComponents: TableComponents<Participants | null> = {
   Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
     <TableContainer component={Paper} {...props} ref={ref} />
   )),
