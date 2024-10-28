@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import "./CreepingText.scss";
 
 interface ICreepingText {
@@ -8,6 +9,9 @@ interface ICreepingText {
 export const CreepingText: React.FC<ICreepingText> = ({ text }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const textRef = useRef<HTMLSpanElement | null>(null);
+  let animating = false;
+  let xPercent = 0;
+  let direction = -1;
 
   const checkTextOverflow = () => {
     const container = containerRef.current;
@@ -18,21 +22,11 @@ export const CreepingText: React.FC<ICreepingText> = ({ text }) => {
       const textWidth = textElement.scrollWidth;
 
       if (textWidth > containerWidth) {
-        const overflowAmount = textWidth - containerWidth;
-
-        const animationDuration = Math.max(
-          3,
-          (overflowAmount / containerWidth) * 5
-        );
-
-        textElement.style.animationDuration = `${animationDuration}s`;
-        textElement.style.transform = `translateX(0)`;
-        textElement.style.animation = `creep ${animationDuration}s linear infinite`;
-
-        container.classList.add("animate");
+        animating = true;
+        requestAnimationFrame(animate);
       } else {
-        textElement.style.animation = "";
-        container.classList.remove("animate");
+        animating = false;
+        requestAnimationFrame(stopAnimate);
       }
     }
   };
@@ -46,6 +40,21 @@ export const CreepingText: React.FC<ICreepingText> = ({ text }) => {
       window.removeEventListener("resize", checkTextOverflow);
     };
   }, []);
+
+  const animate = () => {
+    if (xPercent < -100) {
+      xPercent = 0;
+    } else if (xPercent > 0) {
+      xPercent = -100;
+    }
+    gsap.set(textRef.current, { xPercent: xPercent });
+    animating && requestAnimationFrame(animate);
+    xPercent += 0.1 * direction;
+  };
+
+  const stopAnimate = () => {
+    gsap.set(textRef.current, { xPercent: 0 });
+  };
 
   return (
     <div className="text-container" ref={containerRef}>

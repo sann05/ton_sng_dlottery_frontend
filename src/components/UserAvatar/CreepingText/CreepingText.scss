@@ -1,37 +1,13 @@
-$containerMaxWidth: 70px;
-
 .text-container {
   border-radius: 3rem;
   padding: 0 1rem;
-  max-width: $containerMaxWidth;
   overflow: hidden;
   white-space: nowrap;
   position: relative;
 }
 
 .creeping-text {
-  display: inline-block;
   position: relative;
-}
-
-@keyframes creep {
-  0% {
-    transform: translateX(0);
-  }
-
-  10% {
-    transform: translateX(0);
-  }
-
-  80% {
-    transform: translateX(calc(-100% + $containerMaxWidth));
-  }
-  100% {
-    transform: translateX(calc(-100% + $containerMaxWidth));
-  }
-}
-
-.text-container.animate .creeping-text {
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+  white-space: nowrap;
+  display: inline-block;
 }

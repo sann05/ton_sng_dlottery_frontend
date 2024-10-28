@@ -20,14 +20,14 @@ export const columns: ColumnData[] = [
     dataKey: "number",
   },
   {
-    width: 100,
-    label: "id",
-    dataKey: "id",
-  },
-  {
     width: 50,
     label: "avatar",
     dataKey: "avatar",
+  },
+  {
+    width: 150,
+    label: "id",
+    dataKey: "id",
   },
 ];
 
