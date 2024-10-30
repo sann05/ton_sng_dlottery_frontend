@@ -60,7 +60,12 @@ function App() {
           {
             // if connected, show button to send increment
             connected && (
-              <button onClick={() => sendAddParticipant()}>Participate!</button>
+              <button
+                className="participate"
+                onClick={() => sendAddParticipant()}
+              >
+                Participate!
+              </button>
             )
           }
         </div>

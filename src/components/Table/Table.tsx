@@ -1,15 +1,6 @@
 import React, { useMemo } from "react";
 import "./Table.scss";
-import { UserAvatar } from "../UserAvatar/UserAvatar";
-import {
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-} from "@mui/material";
+import { Paper } from "@mui/material";
 import { Participants, ParticipantsData } from "./TableTypes";
 import { TableVirtuoso } from "react-virtuoso";
 import {
@@ -40,7 +31,7 @@ export const ParticipantsTable: React.FC<ParticipantsData> = ({
       <TableVirtuoso
         data={rows}
         components={VirtuosoTableComponents}
-        fixedHeaderContent={fixedHeaderContent}
+        fixedHeaderContent={fixedHeaderContent(rows[1])}
         itemContent={rowContent}
       />
     </Paper>

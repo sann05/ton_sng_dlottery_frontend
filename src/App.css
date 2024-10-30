@@ -22,6 +22,11 @@
   justify-content: center;
 }
 
+.participate {
+  font-size: 23px;
+  padding: 20px;
+}
+
 .table-wrapper {
   position: relative;
   width: calc(100vw - 4rem);

@@ -31,25 +31,38 @@ export const columns: ColumnData[] = [
   },
 ];
 
-export function fixedHeaderContent() {
-  return (
-    <TableRow>
-      {columns.map((column) => (
-        <TableCell
-          key={column.dataKey}
-          variant="head"
-          style={{ width: column.width }}
-          sx={{ backgroundColor: "background.paper" }}
-        >
-          {column.label}
-        </TableCell>
-      ))}
-    </TableRow>
+export function fixedHeaderContent(me: Participants | null) {
+  return () => (
+    <>
+      <TableRow>
+        {columns.map((column) => (
+          <TableCell
+            key={column.dataKey}
+            variant="head"
+            style={{ width: column.width }}
+            sx={{ backgroundColor: "background.paper" }}
+          >
+            {column.label}
+          </TableCell>
+        ))}
+      </TableRow>
+      {me && (
+        <TableRow sx={{ backgroundColor: "background.paper" }}>
+          {rowContent(me.number, me)}
+        </TableRow>
+      )}
+    </>
   );
 }
 
 export function rowContent(index: number, row: Participants | null) {
-  if (!row) return <TableCell colSpan={3}>Empty seed</TableCell>;
+  if (!row)
+    return (
+      <>
+        <TableCell>{index + 1}</TableCell>
+        <TableCell colSpan={2}>Empty seed</TableCell>
+      </>
+    );
 
   return (
     <React.Fragment>
@@ -62,6 +75,8 @@ export function rowContent(index: number, row: Participants | null) {
             />
           ) : column.dataKey === "id" ? (
             <CreepingText text={row[column.dataKey]} />
+          ) : column.dataKey === "number" ? (
+            row[column.dataKey] + 1
           ) : (
             row[column.dataKey]
           )}
