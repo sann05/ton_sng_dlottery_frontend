@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { SnGDLottery } from "../contracts/MainContract";
-import { useTonClient } from "./useTonClient";
+import { useTonClient, useTonHttpApi } from "./useTonClient";
 import { useTonConnect } from "./useTonConnect";
 import { useAsyncInitialize } from "./useAsyncInitialize";
 import { Address, OpenedContract, toNano } from "@ton/core";
 
 export function useMainContract() {
   const client = useTonClient();
+  const httpApi = useTonHttpApi();
   const { sender } = useTonConnect();
 
   const sleep = (time: number) =>
@@ -68,16 +69,43 @@ export function useMainContract() {
         }
       );
     },
-    getLastTransaction: async (address: string) => {
-      if (!mainContract) return false;
-      // client?.getTransactions(mainContract.address, {limit: 5}).then(console.log);
-      // console.log(mainContract?.address.toString());
-      // const httpApi = new HttpApi('https://ton.access.orbs.network/55013c0ff5Bd3F8B62C092Ab4D238bEE463E5501/1/testnet/toncenter-api-v2/jsonRPC');
-      // const addressInfo = await httpApi.getAddressInformation(mainContract.address)
-      // const transactions = await client?.getTransactions(mainContract.address, {limit: 5});
-      // const lastTransaction = transactions?.[0];
-      console.log(mainContract?.address.toString());
-      console.log(address);
-    }
+    waitForLastTransaction: async (address: Address) => {
+      // if (!httpApi || !client) return false;
+      // const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+      // const addressInfo = await httpApi.getAddressInformation(address);
+      // const addressInfo2 = mainContract && await httpApi.getAddressInformation(mainContract.address);
+      // const { last_transaction_id: { hash, lt} } = addressInfo;
+      // let loop = true;
+      // const transaction = await client.getTransaction(address, lt, hash);
+      // console.log(transaction);
+
+      // while (loop) {
+      //   await sleep(10000);
+      //   const transaction = await client.getTransaction(address, lt, hash);
+      //   if (!transaction) {
+      //     loop = false;
+      //     break;
+      //   };
+      //   const { hash: getHash, prevTransactionHash } = transaction;
+      //   console.log(getHash().toString('hex'));
+      //   console.log(prevTransactionHash);
+        // if (addressInfo2) {
+        //   const transaction2 = await client.getTransaction(mainContract.address, addressInfo2.last_transaction_id.lt, addressInfo2.last_transaction_id.hash);
+        //   console.log(transaction2?.hash().toString('hex'));
+        //   console.log(transaction2?.prevTransactionHash);
+        // }
+
+      // };
+      // while(true) {
+      //   await sleep(1500);
+      // }
+      // let txs = [];
+      // while (txs.length == 0) {
+      //   await sleep(1200);
+      //   const resp = await fetch('https://toncenter.com/api/index/getTransactionByInMessageHash?&include_msg_body=false&msg_hash=' + encodeURIComponent(last_transaction_id.hash));
+      //   txs = await resp.json();
+      //   console.log(txs);
+      // }
+    },
   };
 }
