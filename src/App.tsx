@@ -6,6 +6,7 @@ import WebApp from "@twa-dev/sdk";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { ParticipantsTable } from "./components/Table/Table";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const darkTheme = createTheme({
   palette: {
@@ -13,20 +14,42 @@ const darkTheme = createTheme({
   },
 });
 
+const compareIds = (id: string, id2: string) => {
+  return id.substring(3, id.length - 3) === id2.substring(3, id2.length - 3);
+};
+
 function App() {
   const {
     participantsCount,
     participants,
-    contractAddress,
     sendAddParticipant,
     sendWithdraw,
+    getLastTransaction,
   } = useMainContract();
+
+  const [meInParticipants, setMeInParticipants] = useState(false);
+  const [participateLoading, setParticipateLoading] = useState(false);
 
   const { connected } = useTonConnect();
   const userFriendlyAddress = useTonAddress();
 
   const checkWithdraw = () =>
     userFriendlyAddress === import.meta.env.VITE_CURRENT_ADDRESS;
+
+  useEffect(() => {
+    if (!participants) return;
+    const me = participants.find((p) =>
+      compareIds(p.toString(), userFriendlyAddress)
+    );
+    if (me) setParticipateLoading(false);
+    setMeInParticipants(!!me);
+  }, [participants]);
+
+  const participate = () => {
+    setParticipateLoading(true);
+    sendAddParticipant();
+    // getLastTransaction(userFriendlyAddress);
+  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -60,13 +83,18 @@ function App() {
           {
             // if connected, show button to send increment
             connected && (
+              // (meInParticipants ? (
+              //   <div>You are participant</div>
+              // ) : (
               <button
                 className="participate"
-                onClick={() => sendAddParticipant()}
+                disabled={participateLoading}
+                onClick={participate}
               >
-                Participate!
+                {participateLoading ? "Loading" : "Participate!"}
               </button>
             )
+            // ))
           }
         </div>
         <div>

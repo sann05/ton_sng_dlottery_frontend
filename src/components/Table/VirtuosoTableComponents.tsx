@@ -31,7 +31,7 @@ export const columns: ColumnData[] = [
   },
 ];
 
-export function fixedHeaderContent(me: Participants | null) {
+export function fixedHeaderContent(me?: Participants | null) {
   return () => (
     <>
       <TableRow>

@@ -68,5 +68,16 @@ export function useMainContract() {
         }
       );
     },
+    getLastTransaction: async (address: string) => {
+      if (!mainContract) return false;
+      // client?.getTransactions(mainContract.address, {limit: 5}).then(console.log);
+      // console.log(mainContract?.address.toString());
+      // const httpApi = new HttpApi('https://ton.access.orbs.network/55013c0ff5Bd3F8B62C092Ab4D238bEE463E5501/1/testnet/toncenter-api-v2/jsonRPC');
+      // const addressInfo = await httpApi.getAddressInformation(mainContract.address)
+      // const transactions = await client?.getTransactions(mainContract.address, {limit: 5});
+      // const lastTransaction = transactions?.[0];
+      console.log(mainContract?.address.toString());
+      console.log(address);
+    }
   };
 }
