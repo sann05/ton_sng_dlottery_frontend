@@ -7,7 +7,6 @@ import { useTonAddress } from "@tonconnect/ui-react";
 import { ParticipantsTable } from "./components/Table/Table";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Address } from "@ton/core";
 
 const darkTheme = createTheme({
   palette: {
@@ -29,19 +28,13 @@ function isTonConnectSdkError(error: Error | string) {
 }
 
 function App() {
-  const {
-    participantsCount,
-    participants,
-    sendAddParticipant,
-    sendWithdraw,
-    waitForLastTransaction,
-  } = useMainContract();
+  const { participantsCount, participants, sendAddParticipant, sendWithdraw } =
+    useMainContract();
 
   const [meInParticipants, setMeInParticipants] = useState(false);
   const [participateLoading, setParticipateLoading] = useState(false);
 
   const { connected } = useTonConnect();
-  const [tonConnectUI] = useTonConnectUI();
   const userFriendlyAddress = useTonAddress();
 
   const checkWithdraw = () =>
@@ -52,6 +45,7 @@ function App() {
     const me = participants.find((p) =>
       compareIds(p.toString(), userFriendlyAddress)
     );
+    if (me) setParticipateLoading(false);
     setMeInParticipants(!!me);
   }, [participants]);
 
@@ -66,12 +60,9 @@ function App() {
     );
   }, [participateLoading]);
 
-  const participate = async () => {
+  const participate = () => {
     setParticipateLoading(true);
-    await sendAddParticipant();
-
-    // const fullAddress = Address.parse(userFriendlyAddress);
-    // waitForLastTransaction(fullAddress).then(console.log);
+    sendAddParticipant();
   };
 
   return (
