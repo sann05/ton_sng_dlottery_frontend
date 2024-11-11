@@ -119,6 +119,9 @@ function App() {
             )
             // ))
           }
+          <a href="https://t.me/$BIhXUe5GkEkdCQAAuDsdBY_GBWs">
+            <button className="participate">Pay with Stars</button>
+          </a>
         </div>
         <div>
           {checkWithdraw() && (
