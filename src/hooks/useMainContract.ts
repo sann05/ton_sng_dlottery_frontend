@@ -68,5 +68,10 @@ export function useMainContract() {
         }
       );
     },
+    getLastTransaction: async (address: string) => {
+      if (!client) return;
+      const parsedAddress = Address.parse(address);
+      return (await client.getTransactions(parsedAddress, { limit: 1 }))[0];
+    },
   };
 }

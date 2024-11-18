@@ -14,6 +14,5 @@ export interface Participants {
 
 export interface ParticipantsData {
   participants: Address[];
-  participantsCount: number;
   meInParticipants?: boolean;
 }

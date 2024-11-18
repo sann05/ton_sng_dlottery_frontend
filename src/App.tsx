@@ -7,12 +7,16 @@ import { useTonAddress } from "@tonconnect/ui-react";
 import { ParticipantsTable } from "./components/Table/Table";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { useEffect, useState } from "react";
+import { transactionEventChannel } from "./EventBus/EventBus";
+import { Cell } from "@ton/core";
 
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
   },
 });
+
+const sleep = (t: number) => new Promise((r) => setTimeout(r, t));
 
 const compareIds = (id: string, id2: string) => {
   return id.substring(3, id.length - 3) === id2.substring(3, id2.length - 3);
@@ -28,8 +32,13 @@ function isTonConnectSdkError(error: Error | string) {
 }
 
 function App() {
-  const { participantsCount, participants, sendAddParticipant, sendWithdraw } =
-    useMainContract();
+  const {
+    participantsCount,
+    participants,
+    sendAddParticipant,
+    sendWithdraw,
+    getLastTransaction,
+  } = useMainContract();
 
   const [meInParticipants, setMeInParticipants] = useState(false);
   const [participateLoading, setParticipateLoading] = useState(false);
@@ -45,7 +54,6 @@ function App() {
     const me = participants.find((p) =>
       compareIds(p.toString(), userFriendlyAddress)
     );
-    if (me) setParticipateLoading(false);
     setMeInParticipants(!!me);
   }, [participants]);
 
@@ -63,6 +71,17 @@ function App() {
   const participate = () => {
     setParticipateLoading(true);
     sendAddParticipant();
+    transactionEventChannel.once("onTransactionSend", async (boc) => {
+      const transaction = await getLastTransaction(userFriendlyAddress);
+      const hash = transaction?.hash().toString("hex");
+      let lastHash = hash;
+      while (hash === lastHash) {
+        await sleep(1500);
+        const transaction = await getLastTransaction(userFriendlyAddress);
+        lastHash = transaction?.hash().toString("hex");
+      }
+      setParticipateLoading(false);
+    });
   };
 
   return (
@@ -70,12 +89,7 @@ function App() {
       <CssBaseline />
       <div>
         <div className="table-wrapper">
-          {participants && participantsCount && (
-            <ParticipantsTable
-              participants={participants}
-              participantsCount={participantsCount}
-            />
-          )}
+          <ParticipantsTable participants={participants || []} />
         </div>
 
         <div className="connect-button__container">
