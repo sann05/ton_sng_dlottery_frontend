@@ -3,7 +3,13 @@ import { SnGDLottery } from "../contracts/MainContract";
 import { useTonClient } from "./useTonClient";
 import { useTonConnect } from "./useTonConnect";
 import { useAsyncInitialize } from "./useAsyncInitialize";
-import { Address, OpenedContract, toNano } from "@ton/core";
+import {
+  Address,
+  beginCell,
+  OpenedContract,
+  storeMessage,
+  toNano,
+} from "@ton/core";
 
 export function useMainContract() {
   const client = useTonClient();
@@ -68,10 +74,45 @@ export function useMainContract() {
         }
       );
     },
-    getLastTransaction: async (address: string) => {
+    waitForTransaction: async (address: string, hash: string) => {
       if (!client) return;
-      const parsedAddress = Address.parse(address);
-      return (await client.getTransactions(parsedAddress, { limit: 1 }))[0];
+      return new Promise((resolve) => {
+        let refetches = 0;
+        const walletAddress = Address.parse(address);
+        const interval = setInterval(async () => {
+          refetches += 1;
+          const state = await client.getContractState(walletAddress);
+          if (!state || !state.lastTransaction) {
+            clearInterval(interval);
+            resolve(null);
+            return;
+          }
+
+          const { lt: lastLt, hash: lastHash } = state.lastTransaction;
+          const lastTx = await client.getTransaction(
+            walletAddress,
+            lastLt,
+            lastHash
+          );
+
+          if (lastTx && lastTx.inMessage) {
+            const msgCell = beginCell()
+              .store(storeMessage(lastTx.inMessage))
+              .endCell();
+            const inMsgHash = msgCell.hash().toString("base64");
+
+            if (inMsgHash === hash) {
+              clearInterval(interval);
+              resolve(lastTx);
+            }
+          }
+
+          if (refetches >= 20) {
+            clearInterval(interval);
+            resolve(null);
+          }
+        }, 1500);
+      });
     },
   };
 }

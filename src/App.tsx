@@ -37,7 +37,7 @@ function App() {
     participants,
     sendAddParticipant,
     sendWithdraw,
-    getLastTransaction,
+    waitForTransaction,
   } = useMainContract();
 
   const [meInParticipants, setMeInParticipants] = useState(false);
@@ -72,15 +72,13 @@ function App() {
     setParticipateLoading(true);
     sendAddParticipant();
     transactionEventChannel.once("onTransactionSend", async (boc) => {
-      const transaction = await getLastTransaction(userFriendlyAddress);
-      const hash = transaction?.hash().toString("hex");
-      let lastHash = hash;
-      while (hash === lastHash) {
-        await sleep(1500);
-        const transaction = await getLastTransaction(userFriendlyAddress);
-        lastHash = transaction?.hash().toString("hex");
+      try {
+        const hash = Cell.fromBase64(boc).hash().toString("hex");
+        await waitForTransaction(userFriendlyAddress, hash);
+        setParticipateLoading(false);
+      } catch {
+        setParticipateLoading(false);
       }
-      setParticipateLoading(false);
     });
   };
 
@@ -108,12 +106,10 @@ function App() {
           </div>
         </div>
         <div>
-          {
-            // if connected, show button to send increment
-            connected && (
-              // (meInParticipants ? (
-              //   <div>You are participant</div>
-              // ) : (
+          {connected &&
+            (meInParticipants ? (
+              <div>You are participant</div>
+            ) : (
               <button
                 className="participate"
                 disabled={participateLoading}
@@ -121,9 +117,7 @@ function App() {
               >
                 {participateLoading ? "Loading" : "Participate!"}
               </button>
-            )
-            // ))
-          }
+            ))}
         </div>
         <div>
           {checkWithdraw() && (
