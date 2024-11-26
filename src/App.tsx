@@ -9,6 +9,7 @@ import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { transactionEventChannel } from "./EventBus/EventBus";
 import { Cell } from "@ton/core";
+import { on } from "@telegram-apps/sdk";
 
 const darkTheme = createTheme({
   palette: {
@@ -81,6 +82,10 @@ function App() {
       }
     });
   };
+
+  on("viewport_changed", payload => {
+    console.log("Viewport changed:", payload);
+  });
 
   return (
     <ThemeProvider theme={darkTheme}>
